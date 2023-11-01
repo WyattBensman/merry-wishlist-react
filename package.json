@@ -1,0 +1,26 @@
+{
+  "name": "the-merry-wishlist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server --ignore client",
+    "develop": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/WyattBensman/merry-wishlist-react.git"
+  },
+  "author": "Wyatt Bensman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WyattBensman/merry-wishlist-react/issues"
+  },
+  "homepage": "https://github.com/WyattBensman/merry-wishlist-react#readme",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
