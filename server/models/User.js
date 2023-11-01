@@ -2,6 +2,16 @@ const { Schema, model } = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
+  fName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  lName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   email: {
     type: String,
     unique: true,
@@ -13,20 +23,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  activeLists: [
+  lists: [
     {
       type: Schema.Types.ObjectId,
       ref: "List",
     },
   ],
-  archivedLists: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "List",
-    },
-  ],
-  /* NEED TO FIX THIS EVENTUALLY */
-  savedStores: [String],
 });
 
 // Hashes Password

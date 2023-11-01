@@ -1,18 +1,18 @@
 const { Schema, model } = require("mongoose");
 
 const listItemSchema = new mongoose.Schema({
-  name: {
+  itemName: {
     type: String,
     required: true,
   },
-  price: {
+  itemPrice: {
     type: Number,
     required: true,
   },
-  size: {
+  itemSize: {
     type: String,
   },
-  url: {
+  itemUrl: {
     type: String,
     required: true,
   },
