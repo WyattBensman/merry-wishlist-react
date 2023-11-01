@@ -29,6 +29,12 @@ const userSchema = new mongoose.Schema({
       ref: "List",
     },
   ],
+  savedStores: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Store",
+    },
+  ],
 });
 
 // Hashes Password

@@ -1,11 +1,15 @@
 const { Schema, model } = require("mongoose");
 
 const listSchema = new mongoose.Schema({
-  active: { type: Boolean, required: true, default: true },
-  title: { type: String, required: true },
-  price: { type: Number, required: true },
-  size: String,
-  url: { type: String, required: true },
+  active: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
   listItems: [
     {
       type: Schema.Types.ObjectId,
