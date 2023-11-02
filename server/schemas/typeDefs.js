@@ -50,8 +50,8 @@ type User {
     createItem(input: CreateListItemInput!): ListItem
     editItem(itemId: ID!, input: EditListItemInput!): ListItem
     deleteItem(itemId: ID!): Boolean
-    saveStore(storeId: ID!): Store
-    unsaveStore(storeId: ID!): Store
+    saveStore(userId: ID!, storeId: ID!): User
+    unsaveStore(userId: ID!, storeId: ID!): User
   }
 
 input CreateUserInput {
