@@ -5,15 +5,16 @@ type User {
     lName: String!
     email: String!
     password: String!
-    lists: [List]
-    savedStores: [Store]
+    lists: [List]!
+    savedStores: [Store]!
   }
   
   type List {
     _id: ID!
     active: Boolean!
     title: String!
-    listItems: [ListItem]
+    userId: ID!
+    listItems: [ListItem]!
   }
   
   type ListItem {
@@ -36,7 +37,7 @@ type User {
     user: User
   }
 
-  type Queries {
+  type Query {
     user(userId: ID!): User
     list(listId: ID!): List
     stores: [Store]
@@ -45,13 +46,7 @@ type User {
   type Mutation {
     login(email: String!, password: String!): Auth
     createUser(input: CreateUserInput!): Auth
-    createList(input: CreateListInput!): List
-    archiveList(listId: ID!): List
-    createItem(input: CreateListItemInput!): ListItem
-    editItem(itemId: ID!, input: EditListItemInput!): ListItem
-    deleteItem(itemId: ID!): Boolean
-    saveStore(userId: ID!, storeId: ID!): User
-    unsaveStore(userId: ID!, storeId: ID!): User
+    createList(title: String!, userId: ID!): List
   }
 
 input CreateUserInput {
@@ -60,22 +55,6 @@ input CreateUserInput {
     email: String!
     password: String!
 }
-
-input CreateListInput {
-    title: String!
-  }
-
-input CreateListItemInput {
-    itemName: String!
-    itemPrice: Float!
-    itemSize: String
-    itemUrl: String!
-  }
-  
-  input EditListItemInput {
-    itemName: String
-    itemPrice: Float
-    itemSize: String
-    itemUrl: String
-  }
 `;
+
+module.exports = typeDefs;

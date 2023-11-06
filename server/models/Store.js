@@ -1,13 +1,15 @@
 const { Schema, model } = require("mongoose");
 
-const storeSchema = new mongoose.Schema({
+const storeSchema = new Schema({
   name: {
     type: String,
     required: true,
+    trim: true,
   },
   url: {
     type: String,
     required: true,
+    trim: true,
   },
   image: {
     type: String,
@@ -15,6 +17,6 @@ const storeSchema = new mongoose.Schema({
   },
 });
 
-const Store = mongoose.model("Store", storeSchema);
+const Store = model("Store", storeSchema);
 
 module.exports = Store;

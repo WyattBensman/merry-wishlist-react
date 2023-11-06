@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   fName: {
     type: String,
     required: true,
@@ -22,6 +22,13 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    validate: {
+      validator: function (password) {
+        return /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/.test(password);
+      },
+      message: (props) =>
+        `${props.value} is not a valid password. It must contain at least 8 characters and at least 1 number.`,
+    },
   },
   lists: [
     {
@@ -53,6 +60,6 @@ userSchema.methods.isCorrectPassword = async function (password) {
 };
 
 // Create the User model
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User;
