@@ -11,13 +11,13 @@ type User {
   
   type List {
     _id: ID!
+    userId: User!
     active: Boolean!
     title: String!
-    userId: ID!
-    listItems: [ListItem]!
+    listItems: [Item]!
   }
   
-  type ListItem {
+  type Item {
     _id: ID!
     itemName: String!
     itemPrice: Float!
@@ -38,22 +38,23 @@ type User {
   }
 
   type Query {
-    user(userId: ID!): User
-    list(listId: ID!): List
-    stores: [Store]
+    getUserById(userId: ID!): User
+    getListsByUserId(userId: ID!): [List]
+    getStores: [Store]
   }
 
   type Mutation {
-    login(email: String!, password: String!): Auth
-    createUser(input: CreateUserInput!): Auth
-    createList(title: String!, userId: ID!): List
+    loginUser(email: String!, password: String!): Auth
+    createUser(fName: String!, lName: String!, email: String!, password: String!): Auth
+    createList(userId: ID!, title: String!): List
+    archiveList(listId: ID!): List
+    deleteList(listId: ID!): List
+    createItem(listId: ID!, itemName: String!, itemPrice: Float!, itemSize: String, itemUrl: String!): Item
+    editItem(itemId: ID!, itemName: String!, itemPrice: Float!, itemSize: String, itemUrl: String!): Item
+    deleteItem(itemId: ID!): Item
+    saveStore(userId: ID!, storeId: ID!): User
+    unsaveStore(userId: ID!, storeId: ID!): User
   }
-
-input CreateUserInput {
-    fName: String!
-    lName: String!
-    email: String!
-    password: String!
 }
 `;
 
