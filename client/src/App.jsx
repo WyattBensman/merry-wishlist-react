@@ -1,7 +1,9 @@
+import Store from "./components/store";
+
 function App() {
   return (
     <>
-      <h1>Hey</h1>
+      <Store />
     </>
   );
 }
