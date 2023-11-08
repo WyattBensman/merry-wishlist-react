@@ -3,7 +3,8 @@ const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
-    getUserById: async (_, { userId }) => {
+    // GET USER
+    user: async (_, { userId }) => {
       try {
         const user = await User.findById(userId)
           .populate("lists") // Populate the 'lists' field with associated lists
@@ -15,17 +16,20 @@ const resolvers = {
       }
     },
 
-    getListsByUserId: async (_, { userId }) => {
+    // GET LIST
+    list: async (_, { listId }) => {
       try {
-        const lists = await List.find({ userId }).populate("listItems"); // Populate the 'listItems' field with associated items
-
-        return lists;
+        const list = await List.findById(listId)
+          .populate("userId")
+          .populate("listItems");
+        return list;
       } catch (error) {
-        throw new Error(`Error fetching lists: ${error.message}`);
+        throw new Error(`Error fetching list: ${error.message}`);
       }
     },
 
-    getStores: async () => {
+    // GET STORES
+    stores: async () => {
       try {
         const stores = await Store.find();
 
@@ -54,6 +58,7 @@ const resolvers = {
 
       return { token, user };
     },
+
     // CREATE USER
     createUser: async (_, { fName, lName, email, password }) => {
       const newUser = await User.create({
@@ -62,10 +67,11 @@ const resolvers = {
         email,
         password,
       });
-      const token = signToken(user);
+      const token = signToken(newUser);
 
-      return { token, user };
+      return { token, newUser };
     },
+
     // CREATE LIST
     createList: async (_, { title }, req) => {
       if (!req.user) {
@@ -85,6 +91,7 @@ const resolvers = {
 
       return list;
     },
+
     // ARCHIVE LIST
     archiveList: async (_, { listId }, req) => {
       if (!req.user) {
@@ -109,6 +116,7 @@ const resolvers = {
         throw new Error(`Error archiving list: ${error.message}`);
       }
     },
+
     // DELETE LIST
     deleteList: async (_, { listId }, req) => {
       if (!req.user) {
@@ -125,7 +133,107 @@ const resolvers = {
 
       await User.findByIdAndUpdate(req.user._id, { $pull: { lists: listId } });
 
-      return post;
+      return list;
+    },
+
+    // CREATE ITEM
+    createItem: async (
+      _,
+      { listId, itemName, itemPrice, itemSize, itemUrl },
+      req
+    ) => {
+      if (!req.user) {
+        throw new AuthenticationError();
+      }
+
+      const list = await List.findById(listId);
+
+      if (!list || list.userId.toString() !== req.user._id) {
+        throw new Error(
+          "List not found or you are not authorized to add an item to it."
+        );
+      }
+
+      const newItem = { itemName, itemPrice, itemSize, itemUrl };
+
+      const updatedList = await List.findByIdAndUpdate(
+        listId,
+        { $addToSet: { listItems: newItem } },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedList) {
+        throw new Error("Post not found.");
+      }
+
+      return newItem;
+    },
+
+    // DELETE ITEM
+    deleteItem: async (_, { listId, itemId }, req) => {
+      if (!req.user) {
+        throw new AuthenticationError();
+      }
+
+      const list = await List.findById(listId);
+
+      if (!list || list.userId.toString() !== req.user._id) {
+        throw new Error(
+          "List not found or you are not authorized to add an item to it."
+        );
+      }
+
+      const deletedItem = list.listItems.id(itemId);
+
+      const updatedList = await List.findByIdAndUpdate(
+        listId,
+        { $pull: { listItems: deletedItem } },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedList) {
+        throw new Error("List not found.");
+      }
+
+      return deletedItem;
+    },
+
+    // SAVE STORE
+    saveStore: async (_, { userId, storeId }, req) => {
+      if (!req.user) {
+        throw new AuthenticationError();
+      }
+
+      return await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $addToSet: { savedStores: storeId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    },
+
+    // UNSAVE STORE
+    unsaveStore: async (_, { userId, storeId }, req) => {
+      if (!req.user) {
+        throw new AuthenticationError();
+      }
+
+      return await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $pull: { savedStores: storeId },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
     },
   },
 };
+
+module.exports = resolvers;

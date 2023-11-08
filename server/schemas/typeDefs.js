@@ -38,20 +38,19 @@ type User {
   }
 
   type Query {
-    getUserById(userId: ID!): User
-    getListsByUserId(userId: ID!): [List]
-    getStores: [Store]
+    user(userId: ID!): User
+    list(listId: ID!): List
+    stores: [Store]
   }
 
   type Mutation {
-    loginUser(email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
     createUser(fName: String!, lName: String!, email: String!, password: String!): Auth
     createList(userId: ID!, title: String!): List
     archiveList(listId: ID!): List
     deleteList(listId: ID!): List
     createItem(listId: ID!, itemName: String!, itemPrice: Float!, itemSize: String, itemUrl: String!): Item
-    editItem(itemId: ID!, itemName: String!, itemPrice: Float!, itemSize: String, itemUrl: String!): Item
-    deleteItem(itemId: ID!): Item
+    deleteItem(listId: ID!, itemId: ID!): Item
     saveStore(userId: ID!, storeId: ID!): User
     unsaveStore(userId: ID!, storeId: ID!): User
   }
