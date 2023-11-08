@@ -1,9 +1,11 @@
-import Store from "./components/store";
+import Navbar from "./components/Navbar";
+import ListView from "./pages/ListView";
 
 function App() {
   return (
     <>
-      <Store />
+      <Navbar />
+      <ListView />
     </>
   );
 }
