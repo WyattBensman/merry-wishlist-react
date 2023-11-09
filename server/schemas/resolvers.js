@@ -92,31 +92,6 @@ const resolvers = {
       return list;
     },
 
-    // ARCHIVE LIST
-    archiveList: async (_, { listId }, req) => {
-      if (!req.user) {
-        throw new AuthenticationError();
-      }
-
-      try {
-        const archivedList = await List.findByIdAndUpdate(
-          listId,
-          { active: false },
-          { new: true }
-        );
-
-        if (!archivedList || archivedList.userId.toString() !== req.user._id) {
-          throw new Error(
-            "List not found or you are not authorized to archive it."
-          );
-        }
-
-        return archivedList;
-      } catch (error) {
-        throw new Error(`Error archiving list: ${error.message}`);
-      }
-    },
-
     // DELETE LIST
     deleteList: async (_, { listId }, req) => {
       if (!req.user) {

@@ -12,7 +12,6 @@ type User {
   type List {
     _id: ID!
     userId: User!
-    active: Boolean!
     title: String!
     listItems: [Item]!
   }
@@ -96,7 +95,6 @@ type User {
     login(email: String!, password: String!): Auth
     createUser(fName: String!, lName: String!, email: String!, password: String!): Auth
     createList(userId: ID!, title: String!): List
-    archiveList(listId: ID!): List
     deleteList(listId: ID!): List
     createItem(listId: ID!, itemName: String!, itemPrice: Float!, itemSize: String, itemUrl: String!): Item
     deleteItem(listId: ID!, itemId: ID!): Item

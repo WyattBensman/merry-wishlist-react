@@ -1,11 +1,43 @@
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { CREATE_ITEM } from "../utils/mutations";
+
 export default function ListView() {
+  const [formData, setFormData] = useState({
+    itemName: "",
+    itemPrice: "",
+    itemSize: "",
+    itemUrl: "",
+  });
+
+  const [createItem] = useMutation(CREATE_ITEM);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const { data } = await createItem({
+        variables: { ...formData },
+      });
+
+      console.log("New user registered:", data.createItem.user);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="px-4 sm:px-8 md:px-16 lg:px-20 xl:px-24 py-10 flex space-x-12">
         <div className="w-3/12">
           <h2 className="text-transparent text-xl">.</h2>
           <div className="border-b border-gray-300 my-4"></div>
-          <div className="w-full">
+          {/* START OF FORM */}
+          <form className="w-full">
             {/* NAME */}
             <label htmlFor="itemName" className="block text-lg text-black">
               Description
@@ -79,12 +111,12 @@ export default function ListView() {
               placeholder=""
               className="block w-full px-4 py-2 border rounded-md shadow-sm text-secondary focus:outline-none"
             />
-          </div>
-          <div className="flex justify-center mt-4">
-            <button className="bg-red-600 px-12 py-2 rounded text-white font-medium hover:text-gray-200 hover:shadow-md duration-200">
-              Add New Item
-            </button>
-          </div>
+            <div className="flex justify-center mt-4">
+              <button className="bg-red-600 px-12 py-2 rounded text-white font-medium hover:text-gray-200 hover:shadow-md duration-200">
+                Add New Item
+              </button>
+            </div>
+          </form>
         </div>
         <div className="w-9/12">
           <h2 className="text-xl font-medium">Wishlist Items</h2>

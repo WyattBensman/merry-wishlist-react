@@ -75,11 +75,6 @@ const listSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  active: {
-    type: Boolean,
-    required: true,
-    default: true,
-  },
   title: {
     type: String,
     required: true,

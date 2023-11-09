@@ -1,12 +1,12 @@
 import Navbar from "./components/Navbar";
+import Item from "./components/item";
+import ArvhivedListView from "./pages/archivedlist";
 import Home from "./pages/home";
-import Stores from "./pages/stores";
 
 function App() {
   return (
     <>
       <Navbar />
-      <Home />
     </>
   );
 }

@@ -58,17 +58,6 @@ export const CREATE_LIST = gql`
   }
 `;
 
-// Archive List Mutation
-export const ARCHIVE_LIST = gql`
-  mutation ArchiveList($listId: ID!) {
-    archiveList(listId: $listId) {
-      _id
-      title
-      active
-    }
-  }
-`;
-
 // Delete List Mutation
 export const DELETE_LIST = gql`
   mutation DeleteList($listId: ID!) {

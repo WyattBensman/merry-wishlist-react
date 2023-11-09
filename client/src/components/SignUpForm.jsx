@@ -20,18 +20,21 @@ export function SignUpForm() {
     e.preventDefault();
 
     try {
-      const { data } = await addUser({
+      const { data } = await createUser({
         variables: { ...formData },
       });
 
-      console.log("New user registered:", data.addUser.user);
+      console.log("New user registered:", data.createUser.user);
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <form className="md:w-2/5 w-3/4 border rounded px-12 py-16">
+    <form
+      className="md:w-2/5 w-3/4 border rounded px-12 py-16"
+      onSubmit={handleSubmit}
+    >
       <h1 className="text-4xl font-medium mb-2">Sign Up</h1>
       <h2 className="mb-10 italic text-sm">
         Take the First Step Towards a Healthier You!
@@ -47,8 +50,8 @@ export function SignUpForm() {
               First Name
             </label>
             <input
-              value={fName}
-              onChange={(e) => setFName(e.target.value)}
+              value={formData.fName}
+              onChange={handleInputChange}
               type="text"
               id="fName"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -63,8 +66,8 @@ export function SignUpForm() {
               Last Name
             </label>
             <input
-              value={lName}
-              onChange={(e) => setLName(e.target.value)}
+              value={formData.lName}
+              onChange={handleInputChange}
               type="text"
               id="fName"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -82,8 +85,8 @@ export function SignUpForm() {
           Email
         </label>
         <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={handleInputChange}
           type="email"
           id="email"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -99,8 +102,8 @@ export function SignUpForm() {
           Password
         </label>
         <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={handleInputChange}
           type="password"
           id="password"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
