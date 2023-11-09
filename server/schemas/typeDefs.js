@@ -21,9 +21,58 @@ type User {
     _id: ID!
     itemName: String!
     itemPrice: Float!
-    itemSize: String
+    itemSize: SizeOptions
     itemUrl: String!
   }
+
+  enum SizeOptions {
+    -
+    XS
+    S
+    M
+    L
+    XL
+    XXL
+    U.S. Men 4
+    U.S. Men 4.5
+    U.S. Men 5
+    U.S. Men 5.5
+    U.S. Men 6
+    U.S. Men 6.5
+    U.S. Men 7
+    U.S. Men 7.5
+    U.S. Men 8
+    U.S. Men 8.5
+    U.S. Men 9
+    U.S. Men 9.5
+    U.S. Men 10
+    U.S. Men 10.5
+    U.S. Men 11
+    U.S. Men 11.5
+    U.S. Men 12
+    U.S. Men 12.5
+    U.S. Men 13
+    U.S. Women 4
+    U.S. Women 4.5
+    U.S. Women 5
+    U.S. Women 5.5
+    U.S. Women 6
+    U.S. Women 6.5
+    U.S. Women 7
+    U.S. Women 7.5
+    U.S. Women 8
+    U.S. Women 8.5
+    U.S. Women 9
+    U.S. Women 9.5
+    U.S. Women 10
+    U.S. Women 10.5
+    U.S. Women 11
+    U.S. Women 11.5
+    U.S. Women 12
+    U.S. Women 12.5
+    U.S. Women 13
+  }
+  
   
   type Store {
     _id: ID!

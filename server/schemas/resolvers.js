@@ -61,15 +61,15 @@ const resolvers = {
 
     // CREATE USER
     createUser: async (_, { fName, lName, email, password }) => {
-      const newUser = await User.create({
-        fname,
+      const user = await User.create({
+        fName,
         lName,
         email,
         password,
       });
-      const token = signToken(newUser);
+      const token = signToken(user);
 
-      return { token, newUser };
+      return { token, user };
     },
 
     // CREATE LIST

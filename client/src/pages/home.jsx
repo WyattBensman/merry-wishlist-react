@@ -33,7 +33,11 @@ export default function Home() {
             </button>
           </div>
           {/* SAVED STORES */}
-          <div className="flex mt-2"></div>
+          <div className="flex">
+            <div className="w-36 border rounded flex justify-center items-center mt-4 mr-4">
+              <img src="./images/nike.jpeg" className="w-100" />
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -14,7 +14,7 @@ export default function Store() {
   return (
     /* Change to be a hyperlink */
     <div
-      className="w-36 border rounded flex justify-center items-center"
+      className="w-36 border rounded flex justify-center items-center mt-4 mr-4"
       onMouseOver={handleMouseOver}
       onMouseLeave={handleMouseLeave}
     >

@@ -30,7 +30,7 @@ export const CREATE_USER = gql`
       password: $password
     ) {
       token
-      newUser {
+      user {
         _id
         fName
         lName

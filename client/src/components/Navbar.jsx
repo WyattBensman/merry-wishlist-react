@@ -46,14 +46,6 @@ export default function Navbar() {
               Stores
             </a>
           </li>
-          <li>
-            <a
-              href="#"
-              className="block py-2 pl-3 pr-4 rounded hover:text-gray-300 md:border-0 md:p-0"
-            >
-              Music
-            </a>
-          </li>
         </ul>
       </div>
     </nav>
