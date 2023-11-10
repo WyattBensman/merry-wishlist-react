@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { DELETE_ITEM } from "../utils/mutations";
 
-export default function Item() {
+export default function Item({ itemName, itemPrice, itemSize, itemUrl }) {
   const [deleteItem] = useMutation(DELETE_ITEM);
 
   const handleDeleteItem = async () => {
@@ -27,22 +27,25 @@ export default function Item() {
         {/* IMAGE */}
         <img src="./images/nike.jpeg" className="w-20 h-20 border" />
         {/* TITLE */}
-        <h1 className="ms-3 font-medium">New Balance 9060</h1>
+        <h1 className="ms-3 font-medium">{itemName}</h1>
       </div>
       <div className="flex justify-center mb-2">
         <div className="border-b border-gray-300 w-3/4"></div>
       </div>
       <div className="flex">
         {/* PRICE */}
-        <p className="w-1/2 text-center">$110</p>
+        <p className="w-1/2 text-center">${itemPrice}</p>
         {/* SIZE */}
-        <p className="w-1/2 text-center">10.5 M</p>
+        <p className="w-1/2 text-center">{itemSize}</p>
       </div>
       <div className="flex mb-3 justify-center">
         {/* LINK */}
-        <button className="w-3/4 mt-2 py-1 px-2 border border-green-700 rounded hover:bg-green-700 hover:text-white duration-200">
+        <a
+          src={itemUrl}
+          className="w-3/4 mt-2 py-1 px-2 border border-green-700 rounded hover:bg-green-700 hover:text-white duration-200"
+        >
           Visit Website
-        </button>
+        </a>
       </div>
     </div>
   );

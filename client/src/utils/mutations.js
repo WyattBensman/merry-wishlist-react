@@ -46,7 +46,6 @@ export const CREATE_LIST = gql`
     createList(title: $title) {
       _id
       title
-      active
       listItems {
         _id
         itemName
@@ -64,7 +63,6 @@ export const DELETE_LIST = gql`
     deleteList(listId: $listId) {
       _id
       title
-      active
     }
   }
 `;

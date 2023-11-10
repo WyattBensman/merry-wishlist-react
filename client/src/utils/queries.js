@@ -38,7 +38,6 @@ export const GET_LIST = gql`
         lName
         email
       }
-      active
       title
       listItems {
         _id

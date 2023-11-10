@@ -1,12 +1,26 @@
 import { useState } from "react";
-
-// GET USER
-// CREATE LIST
-// DELETE LIST
-// UNSAVE STORE
+import AuthService from "../utils/auth";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_USER } from "../utils/queries";
+import { CREATE_LIST } from "../utils/mutations";
+import List from "../components/list";
+import Store from "../components/store";
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
+
+  // GET USER
+  const user = AuthService.getProfile();
+  const userId = user ? user._id : null;
+
+  const { loading, error, data } = useQuery(GET_USER, {
+    variables: { userId },
+  });
+
+  const { fName, lName, lists, savedStores } = data.user;
+
+  // CREATE LIST
+  const [createList] = useMutation(CREATE_LIST);
 
   const handleNewListClick = () => {
     setShowPopup(true);
@@ -16,10 +30,22 @@ export default function Home() {
     setShowPopup(false);
   };
 
-  const handleCreateList = (e) => {
+  const handleCreateList = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    // ...
+    const title = e.target.elements.title.value;
+
+    try {
+      const { data } = await createList({
+        variables: { title },
+        refetchQueries: [{ query: GET_USER, variables: { userId } }],
+      });
+
+      // You can handle the data returned from the mutation here if needed
+      console.log("Created list:", data.createList);
+    } catch (error) {
+      console.error("Error creating list:", error);
+    }
+
     setShowPopup(false); // Close the popup after creating the list
   };
 
@@ -27,7 +53,10 @@ export default function Home() {
     <>
       <div className="px-4 sm:px-8 md:px-16 lg:px-20 xl:px-24 py-10">
         <div className="flex flex-col justify-center items-center">
-          <h1 className="text-2xl text-center">Hello, Wyatt Bensman!</h1>
+          {/* INTRODUCTION */}
+          <h1 className="text-2xl text-center">
+            Hello, {fName} {lName}!
+          </h1>
           <p className="md:w-1/2 w-7/8 mt-4 text-center">
             Simplify your holiday wishlist by effortlessly compiling & sharing
             desired items from various websites. Make gift shopping a breeze for
@@ -45,14 +74,21 @@ export default function Home() {
               New List
             </button>
             <button className="italic px-2 text-sm ms-2 rounded hover:bg-green-700 hover:text-white transition ease-in-out duration-200">
-              Edit Lists
-            </button>
-            <button className="italic px-2 text-sm ms-2 rounded hover:bg-green-700 hover:text-white transition ease-in-out duration-200">
-              Archived Lists
+              Delete List(s)
             </button>
           </div>
           {/* LIST ITEMS */}
-          <div className="flex mt-2 mb-6"></div>
+          <ul className="flex mt-2 mb-6">
+            {lists.map((list) => (
+              <li key={list._id}>
+                <List
+                  title={list.title}
+                  itemCount={list.listItems.length}
+                  listId={list._id}
+                />
+              </li>
+            ))}
+          </ul>
           <div className="flex">
             <h2 className="text-xl">My Stores</h2>
             <button className="italic px-2 text-sm ms-2 rounded hover:bg-green-700 hover:text-white transition ease-in-out duration-200">
@@ -60,11 +96,13 @@ export default function Home() {
             </button>
           </div>
           {/* SAVED STORES */}
-          <div className="flex">
-            <div className="w-36 border rounded flex justify-center items-center mt-4 mr-4">
-              <img src="./images/nike.jpeg" className="w-100" />
-            </div>
-          </div>
+          <ul className="flex">
+            {savedStores.map((store) => (
+              <li key={store._id}>
+                <Store img={store.image} url={store.url} name={store.name} />
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
@@ -109,3 +147,6 @@ export default function Home() {
     </>
   );
 }
+
+// DELETE LIST
+// UNSAVE STORE

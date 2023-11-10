@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_ITEM } from "../utils/mutations";
+import { GET_LIST } from "../utils/queries";
 
-export default function ListView() {
+export default function ListView({ title, listId }) {
   const [formData, setFormData] = useState({
     itemName: "",
     itemPrice: "",
@@ -10,7 +11,22 @@ export default function ListView() {
     itemUrl: "",
   });
 
+  // GET LIST
+  const { loading, error, data } = useQuery(GET_LIST, {
+    variables: { listId },
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching list data</div>;
+
+  const list = data.list;
+  const listItems = list.listItems;
+
+  // CREATE ITEM
   const [createItem] = useMutation(CREATE_ITEM);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error fetching list data</div>;
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,10 +37,11 @@ export default function ListView() {
 
     try {
       const { data } = await createItem({
-        variables: { ...formData },
+        variables: { ...formData, listId },
+        refetchQueries: [{ query: GET_LIST, variables: { listId } }],
       });
 
-      console.log("New user registered:", data.createItem.user);
+      console.log("New item added:", data.createItem);
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +54,7 @@ export default function ListView() {
           <h2 className="text-transparent text-xl">.</h2>
           <div className="border-b border-gray-300 my-4"></div>
           {/* START OF FORM */}
-          <form className="w-full">
+          <form className="w-full" onSubmit={handleSubmit}>
             {/* NAME */}
             <label htmlFor="itemName" className="block text-lg text-black">
               Description
@@ -47,11 +64,12 @@ export default function ListView() {
               type="text"
               placeholder=""
               className="block w-full px-4 py-2 border rounded-md shadow-sm text-secondary focus:outline-none"
+              onChange={handleInputChange}
             />
             <div className="flex my-2">
               {/* PRICE */}
               <div className="me-3 w-2/5">
-                <label htmlFor="itemName" className="block text-lg text-black">
+                <label htmlFor="itemPrice" className="block text-lg text-black">
                   Price
                 </label>
                 <div className="relative">
@@ -59,10 +77,11 @@ export default function ListView() {
                     $
                   </span>
                   <input
-                    name="itemName"
+                    name="itemPrice"
                     type="text"
                     placeholder=""
                     className="w-full pl-6 px-4 py-2 border rounded-md shadow-sm text-secondary focus:outline-none"
+                    onChange={handleInputChange}
                   />
                 </div>
               </div>
@@ -102,27 +121,43 @@ export default function ListView() {
               </div>
             </div>
             {/* URL */}
-            <label htmlFor="itemName" className="block text-lg text-black">
+            <label htmlFor="itemUrl" className="block text-lg text-black">
               URL
             </label>
             <input
-              name="itemName"
+              name="itemUrl"
               type="text"
               placeholder=""
               className="block w-full px-4 py-2 border rounded-md shadow-sm text-secondary focus:outline-none"
+              onChange={handleInputChange}
             />
             <div className="flex justify-center mt-4">
-              <button className="bg-red-600 px-12 py-2 rounded text-white font-medium hover:text-gray-200 hover:shadow-md duration-200">
+              <button
+                type="submit"
+                className="bg-red-600 px-12 py-2 rounded text-white font-medium hover:text-gray-200 hover:shadow-md duration-200"
+              >
                 Add New Item
               </button>
             </div>
           </form>
         </div>
         <div className="w-9/12">
-          <h2 className="text-xl font-medium">Wishlist Items</h2>
+          <h2 className="text-xl font-medium">{title} Items</h2>
           <div className="border-b border-gray-300 my-4"></div>
           {/* ITEMS CONTAINER */}
-          <div className="flex flex-wrap"></div>
+          <div className="flex flex-wrap">
+            {listItems.map((item) => (
+              <Item
+                key={item._id}
+                itemName={item.itemName}
+                itemPrice={item.itemPrice}
+                itemSize={item.itemSize}
+                itemUrl={item.itemUrl}
+                itemId={item._id}
+                listId={listId}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </>
